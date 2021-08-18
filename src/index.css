@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Metropolis typeface */
+@font-face{
+  font-family: 'Metropolis';
+  src: url(./assets/fonts/Metropolis-Regular.otf);
+  font-weight: 400;
+}
+@font-face{
+  font-family: 'Metropolis';
+  src: url(./assets/fonts/Metropolis-Bold.otf);
+  font-weight: 700;
+}
+
+body {
+  @apply font-primary;
+  @apply font-normal;
+}
