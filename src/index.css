@@ -1,13 +1,21 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Metropolis typeface */
+@font-face{
+  font-family: 'Metropolis';
+  src: url(./assets/fonts/Metropolis-Regular.otf);
+  font-weight: 400;
+}
+@font-face{
+  font-family: 'Metropolis';
+  src: url(./assets/fonts/Metropolis-Bold.otf);
+  font-weight: 700;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  @apply font-primary;
+  @apply font-normal;
 }
