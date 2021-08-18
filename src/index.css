@@ -19,3 +19,7 @@ body {
   @apply font-primary;
   @apply font-normal;
 }
+
+p{
+  @apply my-4;
+}

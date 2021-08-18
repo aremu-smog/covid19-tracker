@@ -1,5 +1,4 @@
 module.exports = {
-  mode: "jit",
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -8,15 +7,15 @@ module.exports = {
         primary: "#030E50",
         secondary: "#3E69DF",
         red: "#F55858",
-        green: "#08BD46"
+        green: "#08BD46",
       },
       fontFamily: {
-        primary: ["Metropolis", "sans-serif"]
-      }
-    }
+        primary: ["Metropolis", "sans-serif"],
+      },
+    },
   },
   variants: {
-    extend: {}
+    extend: {},
   },
-  plugins: []
-}
+  plugins: [],
+};
