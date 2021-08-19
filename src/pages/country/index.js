@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import CountryChart from "./chart";
 import CountrySummary from "./summary";
 
 const CountryPage = () => {
@@ -11,6 +12,8 @@ const CountryPage = () => {
   });
   const [loading, setLoading] = useState(true);
   let { slug, name } = useParams();
+
+  const [countryData, setCountrydata] = useState([]);
 
   useEffect(async () => {
     await fetch(`https://api.covid19api.com/dayone/country/${slug}`)
@@ -36,6 +39,7 @@ const CountryPage = () => {
         );
 
         await setSummary(CASES_SUMMARY);
+        await setCountrydata(data);
         setLoading(false);
       });
   }, []);
@@ -44,7 +48,14 @@ const CountryPage = () => {
       <p>
         Selected country <b>{name}</b>
       </p>
-      {loading ? <p>Loading...</p> : <CountrySummary summary={summary} />}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <CountrySummary summary={summary} />
+          <CountryChart data={countryData} />
+        </>
+      )}
     </>
   );
 };
