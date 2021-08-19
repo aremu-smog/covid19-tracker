@@ -1,63 +1,63 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import CountryChart from "./chart";
-import CountrySummary from "./summary";
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import CountryChart from "./chart"
+import CountrySummary from "./summary"
 
 const CountryPage = () => {
-  const [summary, setSummary] = useState({
-    active: 0,
-    confirmed: 0,
-    deaths: 0,
-    recovered: 0,
-  });
-  const [loading, setLoading] = useState(true);
-  let { slug, name } = useParams();
+  const [noOfDays, setNoOfDays] = useState(7)
 
-  const [countryData, setCountrydata] = useState([]);
+  const [loading, setLoading] = useState(true)
+  let { slug, name } = useParams()
+
+  const [countryData, setCountrydata] = useState([])
+  const [countryDataInRange, setCountrydataInRange] = useState([])
+
+  const filterData = input => {}
+
+  const getDataForDays = (data, noOfDays) => {
+    return data.filter((_, index) => index >= data.length - noOfDays)
+  }
+
+  const getDataForMonths = noOfMonths => {}
 
   useEffect(async () => {
     await fetch(`https://api.covid19api.com/dayone/country/${slug}`)
-      .then((res) => res.json())
-      .then(async (data) => {
-        console.log(data);
+      .then(res => res.json())
+      .then(async data => {
+        setCountrydata(countryData => [...countryData, ...data])
 
-        const CASES_SUMMARY = await data.reduce(
-          (total, country) => {
-            total.active = total.active + country.Active;
-            total.deaths = total.deaths + country.Deaths;
-            total.recovered = total.deaths + country.Recovered;
-            total.confirmed = total.deaths + country.Confirmed;
+        setCountrydataInRange(getDataForDays(data, noOfDays))
 
-            return total;
-          },
-          {
-            active: 0,
-            confirmed: 0,
-            deaths: 0,
-            recovered: 0,
-          }
-        );
+        setLoading(false)
+      })
+  }, [])
 
-        await setSummary(CASES_SUMMARY);
-        await setCountrydata(data);
-        setLoading(false);
-      });
-  }, []);
+  const changeDay = e => {
+    setNoOfDays(e.target.value)
+    setCountrydataInRange(getDataForDays(countryData, e.target.value))
+  }
+  console.log("Country data", countryDataInRange)
   return (
     <>
       <p>
-        Selected country <b>{name}</b>
+        <b>{name}</b> data for {noOfDays} days
+        <select onChange={changeDay} value={noOfDays}>
+          <option>3</option>
+          <option>7</option>
+          <option>15</option>
+          <option>30</option>
+        </select>
       </p>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <>
-          <CountrySummary summary={summary} />
-          <CountryChart data={countryData} />
+          <CountrySummary data={countryDataInRange} />
+          <CountryChart data={countryDataInRange} />
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default CountryPage;
+export default CountryPage

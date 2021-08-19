@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
-import Countries from "./countries";
+import React, { useEffect, useState } from "react"
+import Countries from "./countries"
 
 const Homepage = () => {
-  const [countriesList, setCountriesList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("Loading...");
+  const [countriesList, setCountriesList] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState("Loading...")
 
   useEffect(async () => {
     await fetch(`https://api.covid19api.com/countries`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCountriesList(data);
-        console.log(data);
+      .then(res => res.json())
+      .then(data => {
+        setCountriesList(data)
+        // console.log(data);
       })
-      .catch((error) => {
-        setMessage(error.message);
-      });
+      .catch(error => {
+        setMessage(error.message)
+      })
 
-    setLoading(false);
-  }, []);
+    setLoading(false)
+  }, [])
 
   return (
     <section>
@@ -26,7 +26,7 @@ const Homepage = () => {
 
       {loading ? <p>{message}</p> : <Countries list={countriesList} />}
     </section>
-  );
-};
+  )
+}
 
-export default Homepage;
+export default Homepage
