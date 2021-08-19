@@ -29,14 +29,14 @@ const CountryChart = ({ data }) => {
       const theDate = new Date(d.Date);
       //   const theDate = parser(d.Date);
       //   return d.Date;
-      console.log(theDate);
+      //   console.log(theDate);
       return theDate;
     };
     const xAxisLabel = "Time";
     const yValue = (d) => d.Active;
     const yAxisLabel = "Temperature";
 
-    const margin = { top: 60, right: 40, bottom: 88, left: 105 };
+    const margin = { top: 0, right: 0, bottom: 0, left: 0 };
     const innerWidth = 960;
     const innerHeight = 500;
 
