@@ -21,6 +21,28 @@ const CountryChart = ({ data, sortByDay }) => {
   const chartRef = useRef()
 
   useEffect(() => {
+    const flattenedData = []
+
+    data.map(point => {
+      const date = point.Date
+      for (let entry in point) {
+        if (entry !== "Date") {
+          flattenedData.push({
+            Date: date,
+            status: entry,
+            numbers: point[entry]
+          })
+        }
+      }
+    })
+
+    console.log(flattenedData)
+
+    const dataGroup = nest()
+      .key(d => d.status)
+      .entries(flattenedData)
+
+    console.log(dataGroup)
     const svg = select(chartRef.current)
 
     selectAll(".tick").remove()
@@ -28,19 +50,22 @@ const CountryChart = ({ data, sortByDay }) => {
     const xValue = d => {
       return new Date(d.Date)
     }
+    const yValue = d => +d.numbers
 
     const xAxisLabel = "Date"
-    const yValue = d => parseInt(d.Deaths)
-    const yAxisLabel = "Temperature"
+    const yAxisLabel = "No. of cases"
 
     const margin = { top: 40, right: 80, bottom: 60, left: 50 }
 
     const innerWidth = 960 - margin.left - margin.right
     const innerHeight = 500 - margin.top - margin.bottom
 
-    const xScale = scaleTime().domain(extent(data, xValue)).range([margin.left, innerWidth]).nice()
+    const xScale = scaleTime()
+      .domain(extent(flattenedData, xValue))
+      .range([margin.left, innerWidth])
+      .nice()
     const yScale = scaleLinear()
-      .domain(extent(data, yValue))
+      .domain(extent(flattenedData, yValue))
       .range([innerHeight, margin.top])
       .nice()
 
@@ -107,10 +132,11 @@ const CountryChart = ({ data, sortByDay }) => {
     // data plot
     svg
       .selectAll("path")
-      .data([data])
-      // .data([data])
-      .join("path")
-      .attr("d", value => activeLine(value))
+      .data(dataGroup)
+      .enter()
+      .append("path")
+      // .join("path")
+      .attr("d", d => activeLine(d.values))
       .attr("fill", "none")
       .attr("stroke", "white")
   }, [data])
