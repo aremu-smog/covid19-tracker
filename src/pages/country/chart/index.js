@@ -7,16 +7,17 @@ import {
   axisLeft,
   axisBottom,
   line,
-  curveBasis,
-  curveCardinal,
   timeFormat,
   timeMonth,
   timeDay,
   extent
 } from "d3"
 
-const CountryChart = ({ data }) => {
+import { nest } from "d3-collection"
+
+const CountryChart = ({ data, sortByDay }) => {
   // {data, type} =
+
   const chartRef = useRef()
 
   useEffect(() => {
@@ -25,12 +26,11 @@ const CountryChart = ({ data }) => {
     selectAll(".tick").remove()
 
     const xValue = d => {
-      const theDate = new Date(d.Date)
-      return theDate
+      return new Date(d.Date)
     }
 
-    const xAxisLabel = "Time"
-    const yValue = d => d.Active
+    const xAxisLabel = "Date"
+    const yValue = d => parseInt(d.Deaths)
     const yAxisLabel = "Temperature"
 
     const margin = { top: 40, right: 80, bottom: 60, left: 50 }
@@ -38,8 +38,11 @@ const CountryChart = ({ data }) => {
     const innerWidth = 960 - margin.left - margin.right
     const innerHeight = 500 - margin.top - margin.bottom
 
-    const xScale = scaleTime().domain(extent(data, xValue)).range([margin.left, innerWidth])
-    const yScale = scaleLinear().domain(extent(data, yValue)).range([innerHeight, margin.top])
+    const xScale = scaleTime().domain(extent(data, xValue)).range([margin.left, innerWidth]).nice()
+    const yScale = scaleLinear()
+      .domain(extent(data, yValue))
+      .range([innerHeight, margin.top])
+      .nice()
 
     svg
       .append("g")
@@ -60,11 +63,11 @@ const CountryChart = ({ data }) => {
 
     const g = svg.append("g")
 
-    const xAxis = axisBottom(xScale).tickFormat(timeFormat("%m/%d/%Y"))
+    const xAxis = axisBottom(xScale).tickFormat(timeFormat(sortByDay ? "%d %B" : "%B %Y"))
 
     const xAxisG = g
       .append("g")
-      .call(xAxis.ticks(timeDay))
+      .call(xAxis.ticks(sortByDay ? timeDay : timeMonth))
       .attr("transform", `translate(0,${innerHeight})`)
     xAxisG.select(".domain").remove()
 
@@ -82,7 +85,11 @@ const CountryChart = ({ data }) => {
     const activeLine = line()
       .x(d => xScale(xValue(d)))
       .y(d => yScale(yValue(d)))
-      .curve(curveBasis)
+
+    // const deathLine = line()
+    //   .x(d => xScale(xValue(d)))
+    //   .y(d => yScale(yValue(d)))
+    //   .curve(curveBasis)
 
     const yAxisG = g.append("g").call(yAxis).attr("transform", `translate(${margin.left},0)`)
     yAxisG.selectAll(".domain").remove()
@@ -101,6 +108,7 @@ const CountryChart = ({ data }) => {
     svg
       .selectAll("path")
       .data([data])
+      // .data([data])
       .join("path")
       .attr("d", value => activeLine(value))
       .attr("fill", "none")

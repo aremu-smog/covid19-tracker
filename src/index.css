@@ -27,3 +27,8 @@ p{
 .axis-label {
   @apply text-lg;
 }
+
+select{
+  @apply bg-secondary;
+  @apply ml-4;
+}

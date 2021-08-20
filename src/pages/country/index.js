@@ -2,60 +2,54 @@ import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import CountryChart from "./chart"
 import CountrySummary from "./summary"
-import ctl from "@netlify/classnames-template-literals"
+import TimePicker from "./time-picker"
 
 const CountryPage = () => {
-  const [noOfDays, setNoOfDays] = useState(7)
-
-  const [loading, setLoading] = useState(true)
-  let { slug, name } = useParams()
-
   const [countryData, setCountrydata] = useState([])
   const [countryDataInRange, setCountrydataInRange] = useState([])
 
-  const getDataForDays = (data, noOfDays) => {
-    return data.filter((_, index) => index >= data.length - noOfDays)
-  }
-
-  const getDataForMonths = noOfMonths => {}
+  const [loading, setLoading] = useState(true)
+  const [sortByDay, setSortByDay] = useState(true)
+  let { slug, name } = useParams()
 
   useEffect(async () => {
     await fetch(`https://api.covid19api.com/dayone/country/${slug}`)
       .then(res => res.json())
       .then(async data => {
-        setCountrydata(countryData => [...countryData, ...data])
+        data = data.map(country => {
+          return {
+            Date: country.Date,
+            Active: country.Active,
+            Recovered: country.Recovered,
+            Deaths: country.Deaths,
+            Confirmed: country.Confirmed
+          }
+        })
 
-        setCountrydataInRange(getDataForDays(data, noOfDays))
+        setCountrydata(countryData => [...countryData, ...data])
 
         setLoading(false)
       })
   }, [])
 
-  const changeDay = e => {
-    setNoOfDays(e.target.value)
-    setCountrydataInRange(getDataForDays(countryData, e.target.value))
-  }
-  console.log("Country data", countryDataInRange)
-
-  const selectStyle = ctl(` bg-primary text-white px-4 mx-4`)
-
+  console.log("Range", countryDataInRange)
   return (
     <>
       <p>
-        <b>{name}</b> data for {noOfDays} days
-        <select className={selectStyle} onChange={changeDay} value={noOfDays}>
-          <option>3</option>
-          <option>7</option>
-          <option>15</option>
-          <option>30</option>
-        </select>
+        Showing data for <b>{name}</b>
       </p>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <>
+          <TimePicker
+            data={countryData}
+            updateCountryDataRange={setCountrydataInRange}
+            setSortByDay={setSortByDay}
+            sortByDay={sortByDay}
+          />
           <CountrySummary data={countryDataInRange} />
-          <CountryChart data={countryDataInRange} />
+          <CountryChart data={countryDataInRange} sortByDay={sortByDay} />
         </>
       )}
     </>
