@@ -1,5 +1,15 @@
 import React, { useEffect, useRef, useState } from "react"
-import { select, selectAll, axisLeft, axisBottom, timeFormat, timeMonth, timeDay } from "d3"
+import {
+  select,
+  selectAll,
+  axisLeft,
+  axisBottom,
+  timeFormat,
+  timeMonth,
+  timeDay,
+  scaleOrdinal
+} from "d3"
+
 import {
   lineGenerator,
   getGroupedData,
@@ -10,7 +20,8 @@ import {
   getXScale,
   getYScale,
   xAxisLabel,
-  yAxisLabel
+  yAxisLabel,
+  colors
 } from "./helpers"
 
 const CountryChart = ({ data, sortByDay }) => {
@@ -48,7 +59,7 @@ const CountryChart = ({ data, sortByDay }) => {
   const g = svg.append("g")
 
   const xAxis = axisBottom(getXScale(flattenedData)).tickFormat(
-    timeFormat(sortByDay ? "%d %B" : "%B %Y")
+    timeFormat(sortByDay ? "%d %b" : "%b %y")
   )
 
   const xAxisG = g
@@ -85,6 +96,13 @@ const CountryChart = ({ data, sortByDay }) => {
 
   const lines = lineGenerator(flattenedData)
 
+  var res = dataByStatus.map(function (d) {
+    return d.key
+  }) // list of group names
+  var generateColors = scaleOrdinal()
+    .domain(res)
+    .range([...colors])
+
   svg
     .selectAll("path")
     .data(dataByStatus)
@@ -92,7 +110,7 @@ const CountryChart = ({ data, sortByDay }) => {
     .append("path")
     .attr("d", d => lines(d.values))
     .attr("fill", "none")
-    .attr("stroke", "white")
+    .attr("stroke", d => generateColors(d.key))
 
   console.log("Flat", dataByStatus)
 

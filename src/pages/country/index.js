@@ -32,7 +32,7 @@ const CountryPage = () => {
       })
   }, [])
 
-  console.log("Range", countryDataInRange)
+  console.log(countryData)
   return (
     <>
       <p>

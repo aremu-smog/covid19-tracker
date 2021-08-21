@@ -3,7 +3,7 @@ import { timeFormat } from "d3"
 import { nest } from "d3-collection"
 
 const MonthOption = ({ month, value }) => {
-  const monthYearFormat = timeFormat("%B %Y")
+  const monthYearFormat = timeFormat("%b %Y")
   const showMonthYear = monthYearFormat(new Date(month.values[0].Date))
   return <option value={value}>{showMonthYear}</option>
 }
@@ -14,7 +14,7 @@ const MonthPicker = ({ data, updateCountryDataRange }) => {
 
   const getMonth = d => {
     const date = new Date(d.Date)
-    return date.getUTCMonth()
+    return timeFormat("%B %Y")(date)
   }
   const groupDataIntoMonths = data => {
     const dataByMonth = nest()
@@ -32,13 +32,14 @@ const MonthPicker = ({ data, updateCountryDataRange }) => {
     groupDataIntoMonths(data)
   }, [data])
 
+  console.log(availableMonths)
   const filterData = e => {
     const endingIndex = parseInt(e.target.value)
 
     console.log(startingMonthIndex, endingIndex)
     const dataToShow = availableMonths.slice(
       startingMonthIndex,
-      startingMonthIndex + endingIndex + 2
+      startingMonthIndex + endingIndex + 1
     )
 
     const monthlySummaries = dataToShow.map(month => {

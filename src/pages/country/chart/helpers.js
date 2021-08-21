@@ -65,3 +65,5 @@ export const lineGenerator = flattenedData => {
     .x(d => xScale(xValue(d)))
     .y(d => yScale(yValue(d)))
 }
+
+export const colors = ["#ffffff", "yellow", "red", "green"]

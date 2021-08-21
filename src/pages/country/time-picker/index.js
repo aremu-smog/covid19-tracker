@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import DayPicker from "./day"
 import MonthPicker from "./month"
 
@@ -13,7 +13,7 @@ const TimePicker = ({ data, updateCountryDataRange, setSortByDay, sortByDay }) =
 
   return (
     <p>
-      Adjust data by
+      Showing data for
       <select onChange={selectSortingCriteria}>
         <option value='days'>Days</option>
         <option value='months'>Months</option>
