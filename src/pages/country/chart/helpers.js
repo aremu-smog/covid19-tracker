@@ -1,7 +1,7 @@
 import { line, scaleLinear, scaleTime, extent } from "d3"
 import { nest } from "d3-collection"
 
-export const margin = { top: 40, right: 80, bottom: 60, left: 50 }
+export const margin = { top: 40, right: 80, bottom: 60, left: 80 }
 
 export const innerWidth = 960 - margin.left - margin.right
 export const innerHeight = 500 - margin.top - margin.bottom
@@ -12,11 +12,11 @@ export const yValue = d => +d.numbers
 export const xAxisLabel = "Date"
 export const yAxisLabel = "No. of cases"
 
-export const getXScale = flattenedData => {
+export const getXScale = (flattenedData = []) => {
   const xScale = scaleTime()
     .domain(extent(flattenedData, xValue))
     .range([margin.left, innerWidth])
-    .nice()
+    .nice(flattenedData.length)
 
   return xScale
 }
@@ -25,7 +25,7 @@ export const getYScale = flattenedData => {
   const yScale = scaleLinear()
     .domain(extent(flattenedData, yValue))
     .range([innerHeight, margin.top])
-    .nice()
+    .nice(flattenedData.length)
 
   return yScale
 }
@@ -33,7 +33,7 @@ export const getYScale = flattenedData => {
 export const flattenData = data => {
   const flattenedData = []
 
-  data.map(point => {
+  data.forEach(point => {
     const date = point.Date
     for (let entry in point) {
       if (entry !== "Date") {

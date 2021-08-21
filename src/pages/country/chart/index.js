@@ -34,6 +34,7 @@ const CountryChart = ({ data, sortByDay }) => {
     const theFlattenedData = flattenData(data)
     setFlattenedData(theFlattenedData)
 
+    selectAll("g").remove()
     selectAll(".tick").remove()
     selectAll("path").remove()
   }, [data])
@@ -85,7 +86,7 @@ const CountryChart = ({ data, sortByDay }) => {
   yAxisG
     .append("text")
     .attr("class", "axis-label")
-    .attr("y", -40)
+    .attr("y", -60)
     .attr("x", -innerHeight / 2)
     .attr("fill", "white")
     .attr("transform", `rotate(-90)`)

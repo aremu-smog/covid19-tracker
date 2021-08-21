@@ -36,7 +36,7 @@ const CountryPage = () => {
     } catch (error) {
       alert("Kindly refresh this page")
     }
-  }, [])
+  }, [slug])
 
   console.log(countryData)
   return (

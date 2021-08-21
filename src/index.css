@@ -25,7 +25,8 @@ p{
 }
 
 .axis-label {
-  @apply text-lg;
+  @apply text-sm;
+  @apply uppercase;
 }
 
 select{

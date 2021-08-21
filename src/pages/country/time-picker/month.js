@@ -8,39 +8,41 @@ const MonthOption = ({ month, value }) => {
   return <option value={value}>{showMonthYear}</option>
 }
 
+const getMonth = d => {
+  const date = new Date(d.Date)
+  return timeFormat("%B %Y")(date)
+}
+
+const groupDataIntoMonths = data => {
+  const dataByMonth = nest()
+    .key(d => getMonth(d))
+    .entries(data)
+
+  return dataByMonth
+}
+
 const MonthPicker = ({ data, updateCountryDataRange }) => {
   const [availableMonths, setAvailableMonths] = useState([])
   const [startingMonthIndex, setStartingMonthIndex] = useState("")
 
-  const getMonth = d => {
-    const date = new Date(d.Date)
-    return timeFormat("%B %Y")(date)
-  }
-  const groupDataIntoMonths = data => {
-    const dataByMonth = nest()
-      .key(d => getMonth(d))
-      .entries(data)
-
+  useEffect(() => {
+    const dataByMonth = groupDataIntoMonths(data)
     setAvailableMonths(dataByMonth)
-  }
+  }, [data])
 
   const changeStartingIndex = e => {
     setStartingMonthIndex(parseInt(e.target.value))
   }
 
-  useEffect(() => {
-    groupDataIntoMonths(data)
-  }, [data])
-
-  console.log(availableMonths)
+  //   console.log(availableMonths)
   const filterData = e => {
     const endingIndex = parseInt(e.target.value)
 
-    console.log(startingMonthIndex, endingIndex)
     const dataToShow = availableMonths.slice(
       startingMonthIndex,
-      startingMonthIndex + endingIndex + 1
+      startingMonthIndex + endingIndex + 2
     )
+    console.log(startingMonthIndex, endingIndex)
 
     const monthlySummaries = dataToShow.map(month => {
       const summary = month.values.reduce(
@@ -75,9 +77,9 @@ const MonthPicker = ({ data, updateCountryDataRange }) => {
     <>
       <select onChange={changeStartingIndex}>
         <option value=''>From</option>
-        {availableMonths.map((month, index) => (
-          <MonthOption month={month} key={index} value={index} />
-        ))}
+        {availableMonths.map((month, index) => {
+          return <MonthOption month={month} key={index} value={index} />
+        })}
       </select>
       {startingMonthIndex !== "" ? (
         <select onChange={filterData}>
