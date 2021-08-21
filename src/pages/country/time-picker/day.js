@@ -1,15 +1,20 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 
 const DayPicker = ({ data, updateCountryDataRange }) => {
-  const filterData = e => {
-    const noOfDays = e.target.value
+  const daysSelector = useRef()
 
+  const filterData = select => {
+    const noOfDays = daysSelector.current.value
     const dataToShow = data.filter((_, index) => index >= data.length - noOfDays)
     updateCountryDataRange(dataToShow)
   }
 
+  useEffect(() => {
+    filterData()
+  }, [])
+
   return (
-    <select onChange={filterData}>
+    <select ref={daysSelector} onChange={filterData}>
       <option>3</option>
       <option>7</option>
       <option>15</option>
