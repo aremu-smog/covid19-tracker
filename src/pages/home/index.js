@@ -6,18 +6,20 @@ const Homepage = () => {
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState("Loading...")
 
-  useEffect(async () => {
-    await fetch(`https://api.covid19api.com/countries`)
-      .then(res => res.json())
-      .then(data => {
-        setCountriesList(data)
-        // console.log(data);
-      })
-      .catch(error => {
-        setMessage(error.message)
-      })
-
-    setLoading(false)
+  useEffect(() => {
+    try {
+      fetch(`https://api.covid19api.com/countries`)
+        .then(res => res.json())
+        .then(data => {
+          setCountriesList(data)
+          setLoading(false)
+        })
+        .catch(error => {
+          setMessage(error.message)
+        })
+    } catch (error) {
+      setMessage(error.message)
+    }
   }, [])
 
   return (
