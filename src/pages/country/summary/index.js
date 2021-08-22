@@ -10,7 +10,6 @@ const CountrySummary = ({ data }) => {
     recovered: 0
   })
   useEffect(() => {
-    console.log(data)
     const countrySummary = data.reduce(
       (total, country) => {
         total.active = total.active + country.Active
@@ -35,10 +34,10 @@ const CountrySummary = ({ data }) => {
 
   return (
     <div className={summaryStyle}>
-      <SummaryItem title='Total cases confirmed 😪' value={summary.confirmed} />
-      <SummaryItem title='Total deaths 😢' value={summary.deaths} />
-      <SummaryItem title='Total cases recovered 😍' value={summary.recovered} />
-      <SummaryItem title='Total cases active 😞' value={summary.active} />
+      <SummaryItem title='Active' value={summary.active} />
+      <SummaryItem title='Confirmed' value={summary.confirmed} />
+      <SummaryItem title='Deaths' value={summary.deaths} />
+      <SummaryItem title='Recovered' value={summary.recovered} />
     </div>
   )
 }

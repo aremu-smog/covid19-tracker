@@ -1,10 +1,12 @@
 import { line, scaleLinear, scaleTime, extent } from "d3"
 import { nest } from "d3-collection"
 
+export const width = 960
+export const height = 500
 export const margin = { top: 40, right: 80, bottom: 60, left: 80 }
 
-export const innerWidth = 960 - margin.left - margin.right
-export const innerHeight = 500 - margin.top - margin.bottom
+export const innerWidth = width - margin.left - margin.right
+export const innerHeight = height - margin.top - margin.bottom
 
 export const xValue = d => new Date(d.Date)
 export const yValue = d => +d.numbers
@@ -25,7 +27,6 @@ export const getYScale = flattenedData => {
   const yScale = scaleLinear()
     .domain(extent(flattenedData, yValue))
     .range([innerHeight, margin.top])
-    .nice(flattenedData.length)
 
   return yScale
 }
@@ -66,4 +67,15 @@ export const lineGenerator = flattenedData => {
     .y(d => yScale(yValue(d)))
 }
 
+// Active, Confirmed, Deaths, Recovered
 export const colors = ["#ffffff", "yellow", "red", "green"]
+
+export const sortData = (a, b) => {
+  if (a.key < b.key) {
+    return -1
+  }
+  if (a.key > b.key) {
+    return 1
+  }
+  return 0
+}

@@ -24,12 +24,37 @@ p{
   @apply my-4;
 }
 
+.legend{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.active{
+  background-color: white;
+}
+.confirmed{
+  background-color: yellow;
+}
+.deaths{
+  background-color: red;
+}
+.recovered{
+  background-color: green;
+}
 .axis-label {
   @apply text-sm;
   @apply uppercase;
 }
 
+.x-axis-tick text {
+  transform: rotate(-45deg) translate(-50px, 20px);
+  transform-origin: top center;
+}
 select{
   @apply bg-secondary;
   @apply ml-4;
 }
+
+#tooltip{position:absolute;background-color:lightgray;padding:5px}

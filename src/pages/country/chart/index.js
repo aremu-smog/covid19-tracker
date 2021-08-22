@@ -21,7 +21,8 @@ import {
   getYScale,
   xAxisLabel,
   yAxisLabel,
-  colors
+  colors,
+  sortData
 } from "./helpers"
 
 const CountryChart = ({ data, sortByDay }) => {
@@ -97,23 +98,21 @@ const CountryChart = ({ data, sortByDay }) => {
 
   const lines = lineGenerator(flattenedData)
 
-  var res = dataByStatus.map(function (d) {
-    return d.key
-  }) // list of group names
-  var generateColors = scaleOrdinal()
-    .domain(res)
-    .range([...colors])
+  var statuses = dataByStatus
+    .map(function (d) {
+      return d.key
+    })
+    .sort() // list of group names
+  var generateColors = scaleOrdinal().domain(statuses).range(colors)
 
   svg
     .selectAll("path")
-    .data(dataByStatus)
+    .data(dataByStatus.sort(sortData))
     .enter()
     .append("path")
     .attr("d", d => lines(d.values))
     .attr("fill", "none")
     .attr("stroke", d => generateColors(d.key))
-
-  console.log("Flat", dataByStatus)
 
   return <svg ref={chartRef} width='960' height='500'></svg>
 }
