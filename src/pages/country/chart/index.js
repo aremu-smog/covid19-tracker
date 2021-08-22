@@ -68,8 +68,9 @@ const CountryChart = ({ data, sortByDay }) => {
     .append("g")
     .call(xAxis.ticks(sortByDay ? timeDay : timeMonth))
     .attr("transform", `translate(0,${innerHeight})`)
-  xAxisG.select(".domain").remove()
+  xAxisG.selectAll(".domain").remove()
 
+  console.log(dataByStatus)
   // x axis label
   xAxisG
     .append("text")

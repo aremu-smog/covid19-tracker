@@ -13,9 +13,9 @@ const CountrySummary = ({ data }) => {
     const countrySummary = data.reduce(
       (total, country) => {
         total.active = total.active + country.Active
+        total.confirmed = total.confirmed + country.Confirmed
         total.deaths = total.deaths + country.Deaths
-        total.recovered = total.deaths + country.Recovered
-        total.confirmed = total.deaths + country.Confirmed
+        total.recovered = total.recovered + country.Recovered
 
         return total
       },
