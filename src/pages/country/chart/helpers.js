@@ -16,7 +16,6 @@ export const yAxisLabel = "No. of cases"
 
 export const getXScale = (flattenedData = []) => {
   const xScale = scaleTime().domain(extent(flattenedData, xValue)).range([margin.left, innerWidth])
-  // .nice(flattenedData.length)
 
   return xScale
 }
