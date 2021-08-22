@@ -22,7 +22,9 @@ import {
   xAxisLabel,
   yAxisLabel,
   colors,
-  sortData
+  sortData,
+  xValue,
+  yValue
 } from "./helpers"
 
 const CountryChart = ({ data, sortByDay }) => {
@@ -114,6 +116,30 @@ const CountryChart = ({ data, sortByDay }) => {
     .attr("d", d => lines(d.values))
     .attr("fill", "none")
     .attr("stroke", d => generateColors(d.key))
+
+  // set xScale and yScale
+  const xScale = getXScale(flattenedData)
+  const yScale = getYScale(flattenedData)
+
+  svg
+    .append("g")
+    .attr("width", innerWidth)
+    .attr("height", innerHeight)
+    .selectAll("circle")
+    .data(flattenedData)
+    .enter()
+    .append("circle")
+    .attr("fill", d => generateColors(d.status))
+    .attr("r", 5)
+    .attr("cx", d => xScale(xValue(d)))
+    .attr("cy", d => yScale(yValue(d)))
+    .attr("style", "opacity:0")
+    .on("mouseover", e => {
+      e.target.style.opacity = 1
+    })
+    .on("mouseout", e => {
+      e.target.style.opacity = 0
+    })
 
   return <svg ref={chartRef} width='960' height='500'></svg>
 }
