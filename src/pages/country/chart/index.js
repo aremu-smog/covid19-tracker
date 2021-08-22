@@ -31,18 +31,20 @@ const CountryChart = ({ data, sortByDay }) => {
   const chartRef = useRef()
   const [flattenedData, setFlattenedData] = useState([])
 
+  const dataByStatus = getGroupedData(flattenedData)
   const svg = select(chartRef.current)
 
   useEffect(() => {
     const theFlattenedData = flattenData(data)
     setFlattenedData(theFlattenedData)
 
+    // removes all generated paths after each re-render
     selectAll("g").remove()
     selectAll(".tick").remove()
     selectAll("path").remove()
   }, [data])
 
-  const dataByStatus = getGroupedData(flattenedData)
+  // x-axis line of the graph
   svg
     .append("g")
     .append("line")
@@ -51,6 +53,8 @@ const CountryChart = ({ data, sortByDay }) => {
     .attr("x2", innerWidth)
     .attr("y2", innerHeight)
     .attr("stroke", "white")
+
+  // y-axis line of the graph
   svg
     .append("g")
     .append("line")
@@ -72,7 +76,6 @@ const CountryChart = ({ data, sortByDay }) => {
     .attr("transform", `translate(0,${innerHeight})`)
   xAxisG.selectAll(".domain").remove()
 
-  console.log(dataByStatus)
   // x axis label
   xAxisG
     .append("text")
@@ -101,13 +104,15 @@ const CountryChart = ({ data, sortByDay }) => {
 
   const lines = lineGenerator(flattenedData)
 
-  var statuses = dataByStatus
+  const statuses = dataByStatus
     .map(function (d) {
       return d.key
     })
     .sort() // list of group names
-  var generateColors = scaleOrdinal().domain(statuses).range(colors)
 
+  const generateColors = scaleOrdinal().domain(statuses).range(colors)
+
+  // Plot lines
   svg
     .selectAll("path")
     .data(dataByStatus.sort(sortData))

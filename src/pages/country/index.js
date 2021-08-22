@@ -10,7 +10,8 @@ const CountryPage = () => {
 
   const [loading, setLoading] = useState(true)
   const [sortByDay, setSortByDay] = useState(true)
-  let { slug, name } = useParams()
+
+  let { slug, country_name } = useParams()
 
   useEffect(() => {
     try {
@@ -34,15 +35,14 @@ const CountryPage = () => {
           alert(error.message)
         })
     } catch (error) {
-      alert("Kindly refresh this page")
+      alert("Something beyond my powers went wrong🤦🏽‍♂️")
     }
   }, [slug])
 
-  console.log(countryData)
   return (
     <>
       <p>
-        Showing data for <b>{name}</b>
+        Showing data for <b>{country_name}</b>
       </p>
       {loading ? (
         <p>Loading...</p>

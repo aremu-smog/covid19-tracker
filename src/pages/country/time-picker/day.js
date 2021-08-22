@@ -9,16 +9,18 @@ const DayPicker = ({ data, updateCountryDataRange }) => {
     updateCountryDataRange(dataToShow)
   }, [updateCountryDataRange, data])
 
+  // Filter the data once the page loads
   useEffect(() => {
     filterData()
   }, [filterData])
 
+  const days = [3, 7, 15, 30]
+
   return (
     <select ref={daysSelector} onChange={filterData}>
-      <option>3</option>
-      <option>7</option>
-      <option>15</option>
-      <option>30</option>
+      {days.map((day, index) => (
+        <option key={index}>{day}</option>
+      ))}
     </select>
   )
 }
