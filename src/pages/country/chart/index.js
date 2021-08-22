@@ -22,7 +22,6 @@ import {
   xAxisLabel,
   yAxisLabel,
   colors,
-  sortData,
   xValue,
   yValue
 } from "./helpers"
@@ -104,18 +103,15 @@ const CountryChart = ({ data, sortByDay }) => {
 
   const lines = lineGenerator(flattenedData)
 
-  const statuses = dataByStatus
-    .map(function (d) {
-      return d.key
-    })
-    .sort() // list of group names
+  // list all statuses (in alphabetical order)
+  const statuses = dataByStatus.map(d => d.key).sort()
 
   const generateColors = scaleOrdinal().domain(statuses).range(colors)
 
   // Plot lines
   svg
     .selectAll("path")
-    .data(dataByStatus.sort(sortData))
+    .data(dataByStatus)
     .enter()
     .append("path")
     .attr("d", d => lines(d.values))

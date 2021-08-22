@@ -67,13 +67,3 @@ export const lineGenerator = flattenedData => {
 
 // Active, Confirmed, Deaths, Recovered
 export const colors = ["#ffffff", "yellow", "red", "green"]
-
-export const sortData = (a, b) => {
-  if (a.key < b.key) {
-    return -1
-  }
-  if (a.key > b.key) {
-    return 1
-  }
-  return 0
-}
